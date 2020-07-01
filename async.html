@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+
+<title>car canvas</title>
+
+<style type="text/css">
+	body {
+		padding: 0;
+		margin: 0;
+		background: #000
+		width:100%;
+
+		}
+		
+	.container{
+		width:100%;
+		height:100%;
+		margin:auto;
+		background: #000
+		
+	}
+	.zzsc-container{
+		background: #fff
+		width:100%;
+	}
+	.block{
+		display:flex;
+		align-items: center;
+		width:20%;
+	}
+
+	  /*取消默认样式*/ 
+	  input[type=range] {
+      -webkit-appearance: none;  
+  } 
+    /*聚焦边框取消：*/
+    input[type=range]:focus {
+      outline: none;
+  }
+
+  /*滑道设置
+  /*chrome、safari浏览器*/
+  input[type='range']::-webkit-slider-runnable-track{
+      background-color: #1E90FF;
+  }
+  /*firefox浏览器*/
+  input[type='range']::-moz-range-track{
+      background-color: #1E90FF;
+  }
+  /*IE浏览器*/
+  input[type="range"]::-ms-track{       
+    color:transparent;/*去除轨道内竖线*/
+    border-color: transparent;/*去除原有边框*/
+    background-color: #1E90FF;
+  }
+  /*滑块设置*/
+    /*chrome，safar等浏览器设置*/
+  input[type='range']::-webkit-slider-thumb {
+      
+      border: 3px solid #f00;
+      height: 3px;
+      width: 7px;
+      background: blue;
+      cursor: pointer;
+  }
+  /*firefox 浏览器设置*/
+  input[type='range']::-moz-range-thumb {
+      border: 3px solid #f00;
+      height: 3px;
+      width: 7px;
+      border-radius: 8px;
+      background: red;
+      cursor: pointer;
+  }
+  /*IE浏览器设置*/
+  input[type='range']::-ms-thumb {
+      border: 3px solid #f00;
+      height: 3px;
+      width: 7px;
+      border-radius: 8px;
+      background: red;
+      cursor: pointer;
+  } 
+
+		  /*firefox浏览器已填充部分*/
+  input[type=range]::-moz-range-progress {
+      background: linear-gradient(to right, red, white 100%, white);
+      height: 20px;    
+      border-radius: 6px;
+  }
+  /*IE浏览器*/
+  /*滑道未填充的部分*/
+  input[type=range]::-ms-fill-upper {
+    height: 20px;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+  /*滑道已填充的部分*/
+  input[type=range]::-ms-fill-lower {
+    height: 20px;
+    border-radius: 12px;
+    background: linear-gradient(to right, red, white 100%, white);
+  }
+	
+	</style>
+</head>
+<body >
+<div class="zzsc-container">
+	<div class="container ">
+		
+		<img src="img/window1.png" alt="视角图1" />
+		<canvas width=300px height=300px id="gauge1" style="margin-left: -600px margin-top:1px"></canvas>
+		<canvas id="gauge2" ></canvas>
+	    <canvas id="gauge3"></canvas>
+		<canvas width=300px height=300px id="gauge4" ></canvas>	
+
+	</div>
+	<!--滑块-->
+	<div style="background-color: #fff width:100%">
+	     <div class="block" style="float:left">
+	     	<label style="margin-left: 100px color:#00ff00">
+	     	水温表
+	      </label>
+	     	<input id="slider1" type="range" min="0" max="1" 
+	     	step="0.01" value="0" style="width:200px" />
+	     </div>	 
+	     <div class="block" style="float:left ">
+	     	<label style="margin-left: 100px color:#00ff00">转速表</label>
+	     	<input id="slider2" type="range" min="0" max="11" step="0.01" value="0" style="width:200px" />
+	     </div>	 
+	     <div class="block" style="float:left;margin-left:150px">
+	     	<label style="margin-left: 100px color:#00ff00">速度表</label>
+	     	<input id="slider3" type="range" min="0" max="220" step="0.01" value="0" style="width:200px" />
+	     </div>	 
+	     <div class="block">
+	     	<label style="margin-left: 200px color:#00ff00">油量表</label>
+	     	<input id="slider4" type="range" min="0" max="1" step="0.01" value="0" style="width:200px background:" />
+	     </div>	 
+	</div>
+	
+	  </div>
+	</div>
+</div>
+
+<!--绘制小的仪表盘-->
+<!--小仪表盘js-->
+<script src="js/gauge.js"></script>
+
+<script>
+	 var my_canvas_obj1= document.getElementById("gauge1");
+    var gauge1 = new Gauge({
+      "tick_length": 12,        //短刻度的长度
+      "large_tick_length": 22,   //长刻度的长度
+      "tick_thickness": 1,       //刻度条的宽
+      "tick_group_length": 9,     //每组刻度内的短刻度数
+      "ticks_groups_begin": 0,    //起始点
+      "total_degrees": 250,       //圆环的角度
+      "total_tick": 101,          //刻度的总个数
+      "tick_color": "#fff",    //未达到的刻度颜色
+      "num_font_size": 18,      //设置字体颜色
+      "percent": 0,
+      "center_font_size": 60,
+      on_color_gradient: [
+        {
+          color: "#9ED110",
+          percent: 0
+        },
+        {
+          color: "#50B517",
+          percent: 10
+        },
+        {
+          color: "#8adec2",
+          percent: 20
+        },
+        {
+          color: "#08d9fb",
+          percent: 40
+        },
+        {
+          color: "#883efd",
+          percent: 50
+        },
+        {
+          color: "#FF5800",
+          percent: 60
+        },
+        {
+          color: "#FF8100",
+          percent: 70
+        },
+        {
+          color: "#FEAC00",
+          percent: 80
+        },
+        {
+          color: "#FFCC00",
+          percent: 90
+        },
+        {
+          color: "#ff0000",
+          percent: 100
+        }
+      ],
+      animation_duration: 2000,
+      tick_on_color: '#f1594e',
+      cur_score_circle_color: '#ff5e52',//刻度上的圆点颜色
+      center_font_color: '#a0a0a0',//中心字体颜色
+      center_text_unit: ' ℃',    //中心字体
+      "canvas": my_canvas_obj1
+    })
+    
+   
+    
+      gauge1.render();   //绘制静态的仪表盘
+      gauge1.updatePercent(75) ; //更新仪表盘
+        
+
+
+      var slider1 = document.getElementById("slider1");
+      var scale = slider1.value;
+      slider1.onmousedown = function () {
+        slider1.onmousemove = function () {
+            scale = slider1.value;
+        
+      setTimeout(function(){
+    
+        gauge1.updatePercent(100*scale)
+         }, 0);
+
+    }
+}
+</script>
+<script type="text/javascript">
+	 var my_canvas_obj4= document.getElementById("gauge4");
+    var gauge4 = new Gauge({
+      "tick_length": 12,
+      "large_tick_length": 22,
+      "tick_thickness": 1,
+      "tick_group_length": 9,
+      "ticks_groups_begin": 0,
+      "total_degrees": 250,
+      "total_tick": 101,
+      "tick_color": "#fff",
+      "num_font_size": 18,
+      "percent": 0,
+      "center_font_size": 60,
+      on_color_gradient: [
+        {
+          color: "#9ED110",
+          percent: 0
+        },
+        {
+          color: "#50B517",
+          percent: 10
+        },
+        {
+          color: "#8adec2",
+          percent: 20
+        },
+        {
+          color: "#08d9fb",
+          percent: 30
+        },
+        {
+          color: "#883efd",
+          percent: 40
+        },
+        {
+          color: "#FF5800",
+          percent: 50
+        },
+        {
+          color: "#FF8100",
+          percent: 60
+        },
+        {
+          color: "#FEAC00",
+          percent: 70
+        },
+        {
+          color: "#FFCC00",
+          percent: 80
+        },
+        {
+          color: "#ff0000",
+          percent: 90
+        }
+      ],
+      animation_duration: 2000,
+      tick_on_color: '#f1594e',
+      cur_score_circle_color: '#ff5e52',
+      center_font_color: '#a0a0a0',
+      center_text_unit: 'L',
+      "canvas": my_canvas_obj4
+    })
+
+    gauge4.render();
+    gauge4.updatePercent(85);
+
+
+
+      var slider4 = document.getElementById("slider4");
+      var scale = slider4.value;
+      slider4.onmousedown = function () {
+        slider4.onmousemove = function () {
+            scale = slider4.value;
+        
+      setTimeout(function(){
+    
+        gauge4.updatePercent(100*scale)
+         }, 0);
+
+    }
+}
+     
+	
+
+
+</script>
+<!--中一圆盘-->
+<script>
+	//设置中一圆盘的样式
+	function initScriptedGauges2() {
+	var gauge2 =new RadialGauge({
+			renderTo: 'gauge2',      //绑定到canvas
+			width: 500,              //canvas的宽
+			height: 500,             //高
+			units: 'x 1000 r/min',   //中间字体
+			title: false,            //标题
+			value: 0,                //初始值
+			minValue: 0,             //最小值
+			maxValue: 11,            //最大值
+			majorTicks: [
+				'0','1','2','3','4','5','6','7','8','9','10','11'
+			],                       //刻度数组
+			minorTicks: 10,
+			strokeTicks: false,
+			highlights: [
+				{ from: 0, to: 11, color: 'rgba(0,0,0,1)' },
+				
+			],
+			colorPlate: '#000',       //仪表盘颜色
+			colorMajorTicks: '#ff0000',   //短刻度颜色
+			colorMinorTicks: '#ff0000',   //长刻度颜色
+			colorTitle: '#fff',           //
+			colorUnits: '#fff',            //中间字体颜色
+			colorNumbers: '#fff',         //字体颜色
+			colorNeedle: 'rgba(255, 0, 0, 1)',   //指针颜色
+			colorNeedleEnd: 'rgba(255,0,0,1)',  //指针尾部颜色
+			valueBox: true,                   //是否显示中间数值
+			animationRule: 'bounce',      
+			animationDuration: 500
+		});
+
+	gauge2.draw();         //调用draw方法绘制
+
+
+	 //绑定input控件，获得值
+   var slider2 = document.getElementById("slider2");
+    var scale = slider2.value;
+    slider2.onmousedown = function () {
+        slider2.onmousemove = function () {
+            scale = slider2.value;
+            gauge2.value=parseFloat(scale);
+  
+         }
+     }
+	}
+   
+ </script>
+<!--调用js画出圆盘-->
+<script async src="js/gauge.min.js" onload="initScriptedGauges2()"></script>
+
+
+<!--中二圆盘-->
+<script>
+	function initScriptedGauges3() {
+		var gauge3 =new RadialGauge({
+			renderTo: 'gauge3',
+			width: 500,
+			height: 500,
+			units: 'Km/h',
+			title: false,
+			value: 0,
+			minValue: 0,
+			maxValue: 220,
+			majorTicks: [
+				'0','20','40','60','80','100','120','140','160','180','200','220'
+			],
+			minorTicks: 10,
+			strokeTicks: false,
+			highlights: [
+				{ from: 0, to: 220, color: 'rgba(0,0,0,1)' },
+				
+			],
+			colorPlate: '#000',
+			colorMajorTicks: '#ff0000',
+			colorMinorTicks: '#ff0000',
+			colorTitle: '#fff',
+			colorUnits: '#fff',
+			colorNumbers: '#fff',
+			colorNeedle: 'rgba(255, 0, 0, 1)',
+			colorNeedleEnd: 'rgba(255,0,0,1)',
+			valueBox: true,
+			animationRule: 'bounce',
+			animationDuration: 500
+		})
+
+		gauge3.draw();
+		 //绑定input控件，获得值
+   var slider3 = document.getElementById("slider3");
+    var scale = slider3.value;
+   
+    slider3.onmousedown = function () {
+        slider3.onmousemove = function () {
+            scale = slider3.value;
+            gauge3.value=parseFloat(scale);
+  
+         }
+     }
+	}
+
+
+	
+
+	if (!Array.prototype.forEach) {
+		Array.prototype.forEach = function(cb) {
+			var i = 0, s = this.length;
+			for (; i < s; i++) {
+				cb && cb(this[i], i, this);
+			}
+		}
+	}
+
+	document.fonts && document.fonts.forEach(function(font) {
+		font.loaded.then(function() {
+			if (font.family.match(/Led/)) {
+				document.gauges.forEach(function(gauge) {
+					gauge3.update();
+				});
+			}
+		});
+	});
+
+	var timers = [];
+
+	
+	function animateGauge3() {
+		document.gauges.forEach(function(gauge) {
+			timers.push(setInterval(function() {
+				gauge.value = Math.random()*
+					(gauge.options.maxValue - gauge.options.minValue)  +
+					gauge.options.minValue / 2;
+			}, gauge.animation.duration + 50));
+		});
+	}
+
+	function stopGaugesAnimation() {
+		timers.forEach(function(timer) {
+			clearInterval(timer);
+		});
+	}
+</script>
+<script async src="js/gauge.min.js" onload="initScriptedGauges3()"></script>
+
+</body>
+</html>
